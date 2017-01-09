@@ -57,6 +57,7 @@ Server* CHash::findServer(std::string keystr)
             return it->second;
         it++;
     }
+    return m_serverMap.begin()->second;
 }
 
 //删除服务器
