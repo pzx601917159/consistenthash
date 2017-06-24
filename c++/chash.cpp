@@ -26,6 +26,7 @@ void CHash::addServer(Server* server)
 {
     if(server == NULL)
         return;
+    int add_num = 0;
     //生成虚拟节点
     //虚拟节点的个数为32，可以随意设置
     for(int i=0;i<32;i++)
@@ -39,6 +40,27 @@ void CHash::addServer(Server* server)
         if(m_serverMap.find(key) == m_serverMap.end())
             //插入 
             m_serverMap[key] = server;
+        else
+            ++add_num;
+            
+    }
+    if(add_num > 0)
+    {
+        for(int i=0; i<32 && add_num>0; i++)
+        {
+            char buff[1024];
+            memset(buff,0,sizeof(buff));
+            snprintf(buff,sizeof(buff)/sizeof(char),"%u%u%u%u%u%u%u%u%u%u%s",i,i,i,i,i,i,i,i,i,i,server->m_serverName.c_str());
+            std::string serverkey = buff;
+            //插入
+            uint32_t key = strToInt(serverkey);
+            if(m_serverMap.find(key) == m_serverMap.end())
+            {
+                //插入 
+                m_serverMap[key] = server;
+                --add_num;
+            }
+        }
     }
 }
 
