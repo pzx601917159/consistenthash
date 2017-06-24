@@ -32,7 +32,7 @@ void CHash::addServer(Server* server)
     {
         char buff[1024];
         memset(buff,0,sizeof(buff));
-        snprintf(buff,sizeof(buff)/sizeof(char),"%u%s",i,server->m_serverName.c_str());
+        snprintf(buff,sizeof(buff)/sizeof(char),"%u%u%u%u%u%s",i,i,i,i,i,server->m_serverName.c_str());
         std::string serverkey = buff;
         //插入
         uint32_t key = strToInt(serverkey);

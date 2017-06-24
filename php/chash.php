@@ -13,15 +13,35 @@ class CHash {
     public function addServer($server)
     {
         $num = $this->get_vnode_num();
+        $add_num = 0;
         for($i=0; $i<$num; $i++)
         {
             //生成虚拟节点
-            $vserver=$server.$i;
+            $vserver=$server.$i.$i.$i.$i.$i;
             $hash = $this->str2int($vserver);
             //插入
             if(!isset($this->_server_list[$hash]))
             {
                 $this->_server_list[$hash] = $server;
+            }
+            else
+            {
+                ++$add_num;
+            }
+        }
+        if($add_num > 0)
+        {
+            for($i=0; $i<$num && $add_num>0; $i++)
+            {
+                //生成虚拟节点
+                $vserver=$server.$i.$i.$i.$i.$i.$i.$i.$i.$i.$i;
+                $hash = $this->str2int($vserver);
+                //插入
+                if(!isset($this->_server_list[$hash]))
+                {
+                    $this->_server_list[$hash] = $server;
+                    --$add_num;
+                }
             }
         }
     }
@@ -31,10 +51,7 @@ class CHash {
      */
     private function str2int($str)
     {
-        if (is_string($str)) {
-            return crc32(md5($str)) >> 16 & 0x7fff;
-        }
-        return $str;
+        return crc32(md5($str)) & 0xffff;
     }
 
     public function quickfind($key)
